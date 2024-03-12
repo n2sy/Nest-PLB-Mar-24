@@ -17,7 +17,7 @@ export class TaskDTO {
 
   @IsNotEmpty()
   @Min(2000)
-  @Max(2020)
+  @Max(2030)
   year: number;
 
   @IsIn(['todo', 'in progress'])

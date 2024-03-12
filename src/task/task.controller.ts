@@ -3,11 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
   NotFoundException,
   Param,
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Req,
   Res,
   ValidationPipe,
@@ -33,9 +35,11 @@ export class TaskController {
   //   }
   @Post('new')
   addTask(@Body() body: TaskDTO, @Res() response: Response) {
+    console.log(body instanceof TaskDTO);
     let id = uuidv4();
     let nTask = new Task(id, body.title, body.year, new Date());
     this.allTasks.push(nTask);
+
     return response.json({ message: 'Task Added', id });
   }
 
@@ -74,5 +78,29 @@ export class TaskController {
       );
     this.allTasks.splice(i, 1);
     return response.status(200).json({ message: 'Task Deleted' });
+  }
+
+  @Get('/filter')
+  filterTask(
+    @Query(
+      'startYear',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_FOUND,
+      }),
+    )
+    year1,
+    @Query(
+      'endYear',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_FOUND,
+      }),
+    )
+    year2,
+    @Res() response: Response,
+  ) {
+    let t = this.allTasks.filter(
+      (task) => task.year >= year1 && task.year <= year2,
+    );
+    return response.json(t);
   }
 }
