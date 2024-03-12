@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpStatus,
+  Inject,
   NotFoundException,
   Param,
   ParseIntPipe,
@@ -18,11 +19,21 @@ import { Task } from './models/task';
 import { Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { TaskDTO } from './DTO/taskDTO';
+import { UpperandfusionPipe } from '../upperandfusion/upperandfusion.pipe';
+import { TaskService } from './task.service';
 
 @Controller('task')
 export class TaskController {
   allTasks: Task[] = [];
-  //t = new Task()
+  //t = new Task();
+
+  //constructor(private taskSer: TaskService) {}
+  @Inject() taskSer: TaskService;
+
+  @Get('test')
+  test(@Res() response: Response) {
+    return response.json({ message: this.taskSer.sayHello() });
+  }
 
   @Get('all')
   getAllTasks(@Res() response: Response) {
@@ -102,5 +113,10 @@ export class TaskController {
       (task) => task.year >= year1 && task.year <= year2,
     );
     return response.json(t);
+  }
+
+  @Post('testpipe')
+  testerPipe(@Body(UpperandfusionPipe) data, @Res() response: Response) {
+    return response.json({ resultat: data });
   }
 }
