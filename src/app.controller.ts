@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Request, Response } from 'express';
 
-@Controller()
+@Controller('plb')
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  //constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('intro')
+  getHello(@Req() request: Request, @Res() response: Response) {
+    //console.log(request);
+
+    return response.status(201).json({ participant: 'Florian', annee: 2024 });
   }
 }
