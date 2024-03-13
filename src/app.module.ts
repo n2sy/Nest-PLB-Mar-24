@@ -6,6 +6,7 @@ import { TaskService } from './task/task.service';
 import { HelmetMiddleware } from '@nest-middlewares/helmet';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BookModule } from './book/book.module';
+import { AuthModule } from './auth/auth.module';
 
 import * as dotenv from 'dotenv';
 
@@ -25,6 +26,7 @@ dotenv.config();
       synchronize: true,
     }),
     BookModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService, TaskService],

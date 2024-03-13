@@ -1,11 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class GenericService {
   constructor() {} // @InjectRepository(AuthorEntity) private authRepo, // @InjectRepository(BookEntity) private bookRepo,
 
-  findAll(repo) {
-    return repo.find();
+  findAll(repo: Repository<any>) {
+    return repo.find({
+      loadRelationIds: true,
+      //   relations: {
+      //     listeLivres: true,
+      //     author: true,
+      //   },
+    });
   }
 
   findById(id, repo) {
