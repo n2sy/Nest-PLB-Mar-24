@@ -9,6 +9,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Res,
 } from '@nestjs/common';
 import { BookService } from './book.service';
@@ -121,5 +122,44 @@ export class BookController {
   async removeBook(@Param('id', ParseIntPipe) id, @Res() response: Response) {
     let res = await this.bookSer.supprimerLivreV2(id);
     return response.json({ message: 'Livre supprimé', res });
+  }
+
+  @Delete('softremove/:id')
+  async softRemoveBook(
+    @Param('id', ParseIntPipe) id,
+    @Res() response: Response,
+  ) {
+    let res = await this.bookSer.softsupprimerLivreV2(id);
+    return response.json({ message: 'Livre (soft) supprimé avec Remove', res });
+  }
+
+  @Put('recover/:id')
+  async recoverBook(@Param('id', ParseIntPipe) id, @Res() response: Response) {
+    let res = await this.bookSer.recoverLivre(id);
+    return response.json({ message: 'Livre recouvré', id, res });
+  }
+
+  @Get('stats')
+  async nbBooksPerYear(@Res() response: Response) {
+    try {
+      let res = await this.bookSer.nbreLivresParAnnee();
+      return response.json(res);
+    } catch (err) {
+      throw new ConflictException();
+    }
+  }
+
+  @Get('stats2')
+  async nbBooksBetweenYears(
+    @Query('startYear', ParseIntPipe) y1,
+    @Query('endYear', ParseIntPipe) y2,
+    @Res() response: Response,
+  ) {
+    try {
+      let res = await this.bookSer.nbreLivresEntreDeuxAnnees(y1, y2);
+      return response.json(res);
+    } catch (err) {
+      throw new ConflictException();
+    }
   }
 }
