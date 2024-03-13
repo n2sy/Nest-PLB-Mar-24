@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { DurationInterceptor } from './duration/duration.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,10 @@ async function bootstrap() {
     }),
   );
   //app.setGlobalPrefix('v1')
+  app.enableCors({
+    origin: ['florian.fr', 'nidhal.fr'],
+  });
+  app.useGlobalInterceptors(new DurationInterceptor());
   await app.listen(3000);
 }
 bootstrap();
