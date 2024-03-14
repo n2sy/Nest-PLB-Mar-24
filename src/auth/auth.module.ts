@@ -6,6 +6,11 @@ import { UserEntity } from './entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import * as dotenv from 'dotenv';
 import { PassportModule } from '@nestjs/passport';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { JwtStrategy } from './jwt.strategy';
+import { ConfigModule } from '@nestjs/config';
 
 dotenv.config();
 
@@ -21,8 +26,28 @@ dotenv.config();
         expiresIn: 3600,
       },
     }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.HOST_MAIL,
+        auth: {
+          user: process.env.USER_MAIL,
+          pass: process.env.USER_PWD,
+        },
+      },
+      defaults: {
+        from: '"No Reply" <nidhal.noreply@nestjs.com>',
+      },
+      template: {
+        dir: join(__dirname, 'templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
+    ConfigModule.forRoot(),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
 })
 export class AuthModule {}

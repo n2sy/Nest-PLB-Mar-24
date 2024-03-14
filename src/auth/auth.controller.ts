@@ -1,6 +1,15 @@
-import { Body, ConflictException, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  ConflictException,
+  Controller,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +32,31 @@ export class AuthController {
       message: 'Utilisateur connecté',
       access_token: result['access_token'],
     });
+  }
+
+  @Post('forgot-pwd')
+  async forgotPassword(@Body('login') login, @Res() response: Response) {
+    console.log('login', login);
+
+    try {
+      let result = await this.authSer.oublierMotDePasse(login);
+      return response.json(result);
+    } catch (err) {
+      throw new ConflictException();
+    }
+  }
+
+  @Post('reset-password')
+  async resetPassword(
+    @Query('token') token,
+    @Body('password') pwd,
+    @Res() response: Response,
+  ) {
+    try {
+      let result = await this.authSer.reinitialiserMotDePasse(token, pwd);
+      return response.json(result);
+    } catch (err) {
+      throw new ConflictException();
+    }
   }
 }

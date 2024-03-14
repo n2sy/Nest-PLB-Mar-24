@@ -10,18 +10,24 @@ import {
   Post,
   Put,
   Query,
+  Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { BookService } from './book.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { BookDTO } from './DTO/bookdto';
+import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
 
 @Controller('book')
+@UseGuards(JwtAuthGuard)
 export class BookController {
   constructor(private bookSer: BookService) {}
 
   @Get('all')
-  async getAllBooks(@Res() response: Response) {
+  async getAllBooks(@Req() request: Request, @Res() response: Response) {
+    console.log(request);
+
     // V1 avec then et catch
     // this.bookSer
     //   .chercherTousLesLivres()

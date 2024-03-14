@@ -9,7 +9,6 @@ import { BookModule } from './book/book.module';
 import { AuthModule } from './auth/auth.module';
 
 import * as dotenv from 'dotenv';
-import { TokenVerifyMiddleware } from './middlewares/token-verify/token-verify.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 
@@ -59,6 +58,6 @@ export class AppModule implements NestModule {
     HelmetMiddleware.configure({});
     consumer.apply(HelmetMiddleware).forRoutes('');
 
-    consumer.apply(TokenVerifyMiddleware).forRoutes('book*');
+    //consumer.apply(TokenVerifyMiddleware).forRoutes('book*');
   }
 }
