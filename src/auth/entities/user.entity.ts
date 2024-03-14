@@ -1,13 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { RoleEnum } from '../generics/roleEnum';
+import { Timestamp } from 'src/book/generics/timestamp';
 
 @Entity('users')
-export class UserEntity {
+export class UserEntity extends Timestamp {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({
     type: 'varchar',
+    unique: true,
   })
   username;
 
