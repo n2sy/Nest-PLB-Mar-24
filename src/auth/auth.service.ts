@@ -46,8 +46,8 @@ export class AuthService {
       if (result) {
         const token = this.jwtSer.sign({
           id: user.id,
-          identifiant: identifiant,
-          role: user.role,
+          // identifiant: identifiant,
+          // role: user.role,
         });
         return {
           identifiant,

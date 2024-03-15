@@ -15,9 +15,11 @@ import { Response } from 'express';
 import { TaskDTO } from './DTO/taskDTO';
 import { UpperandfusionPipe } from '../upperandfusion/upperandfusion.pipe';
 import { TaskService } from './task.service';
+import { ApiTags } from '@nestjs/swagger';
 
 // @UseInterceptors(DurationInterceptor)
 @Controller('task')
+@ApiTags('tâches')
 export class TaskController {
   //t = new Task();
 

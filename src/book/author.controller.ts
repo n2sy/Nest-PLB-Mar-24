@@ -12,8 +12,10 @@ import {
 } from '@nestjs/common';
 import { AuthorService } from './author.service';
 import { Response } from 'express';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('authors')
+@ApiTags('Auteurs')
 export class AuthorController {
   constructor(private authorSer: AuthorService) {}
 

@@ -18,15 +18,19 @@ import { BookService } from './book.service';
 import { Request, Response } from 'express';
 import { BookDTO } from './DTO/bookdto';
 import { JwtAuthGuard } from 'src/jwt-auth/jwt-auth.guard';
+import { AdminAuthGuard } from 'src/admin-auth/admin-auth.guard';
+import { CanEditGuard } from 'src/can-edit/can-edit.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('book')
 @UseGuards(JwtAuthGuard)
+@ApiTags('Livres')
 export class BookController {
   constructor(private bookSer: BookService) {}
 
   @Get('all')
   async getAllBooks(@Req() request: Request, @Res() response: Response) {
-    console.log(request);
+    //console.log(request);
 
     // V1 avec then et catch
     // this.bookSer
@@ -48,10 +52,11 @@ export class BookController {
   }
 
   @Post('add')
-  async addBook(@Body() book: BookDTO, @Res() response: Response) {
+  // @UseGuards(AdminAuthGuard)
+  async addBook(@Req() request: Request, @Body() book: BookDTO) {
     try {
-      let result = await this.bookSer.ajouterLivre(book);
-      return response.json({ message: 'Livre ajouté', result });
+      let result = await this.bookSer.ajouterLivre(book, request.user['id']);
+      return { message: 'Livre ajouté', result };
     } catch (err) {
       throw new ConflictException();
     }
@@ -77,6 +82,8 @@ export class BookController {
   }
 
   @Put('edit/:id')
+  // @UseGuards(AdminAuthGuard)
+  @UseGuards(CanEditGuard)
   async updateBook(
     @Param('id', ParseIntPipe) bookId,
     @Body() uBook,
@@ -108,6 +115,8 @@ export class BookController {
   }
 
   @Delete('softdel/:id')
+  @UseGuards(AdminAuthGuard)
+  @UseGuards(CanEditGuard)
   async softDeleteBook(
     @Param('id', ParseIntPipe) id,
     @Res() response: Response,
@@ -120,6 +129,7 @@ export class BookController {
   }
 
   @Put('restore/:id')
+  @UseGuards(AdminAuthGuard)
   async restoreBook(@Param('id', ParseIntPipe) id, @Res() response: Response) {
     let res = await this.bookSer.restaurerLivre(id);
     return response.json({ message: 'Livre restauré', id, res });

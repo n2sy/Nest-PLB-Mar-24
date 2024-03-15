@@ -14,4 +14,6 @@ export class BookDTO {
 
   @IsNotEmpty()
   author;
+
+  user;
 }

@@ -16,8 +16,14 @@ export class GenericService {
   }
 
   findById(id, repo) {
-    return repo.findOneByOrFail({
-      id: id,
+    // return repo.findOneByOrFail({
+    //   id: id,
+    // });
+    return repo.find({
+      loadRelationIds: true,
+      where: {
+        id: id,
+      },
     });
   }
 

@@ -23,7 +23,8 @@ export class BookService {
     // });
   }
 
-  ajouterLivre(newBook: BookDTO) {
+  ajouterLivre(newBook: BookDTO, idUser) {
+    newBook.user = idUser;
     return this.genericSer.ajouterEntity(newBook, this.bookRepo);
   }
 
