@@ -20,7 +20,7 @@ export class TokenVerifyMiddleware implements NestMiddleware {
     const token = authHeader.split(' ')[1];
     try {
       const decodedToken = this.jwtSer.verify(token, {
-        secret: this.configSer.get('SECRET'),
+        secret: 'supersecretcode',
       });
       if (!decodedToken) {
         throw new UnauthorizedException('Token expiré');

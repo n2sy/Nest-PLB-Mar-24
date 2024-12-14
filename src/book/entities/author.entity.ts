@@ -13,7 +13,7 @@ export class AuthorEntity extends Timestamp {
   @Column()
   nom: string;
 
-  @OneToMany(() => BookEntity, (book) => book.author, {
+  @OneToMany(() => BookEntity, (book) => book.id, {
     //eager: true,
   })
   listeLivres: BookEntity[];

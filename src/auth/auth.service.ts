@@ -1,14 +1,14 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import {
   Injectable,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
-import * as bcrypt from 'bcrypt';
-import { JwtService } from '@nestjs/jwt';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
@@ -57,19 +57,19 @@ export class AuthService {
     }
   }
 
-  oublierMotDePasse(login) {
-    const generatedToken = this.jwtSer.sign({
-      identifiant: login,
-    });
+  async oublierMotDePasse(login) {
+    // const generatedToken = this.jwtSer.sign({
+    //   identifiant: 'jelassi.nidhal@gmail.com',
+    // });
 
-    console.log(generatedToken);
+    // console.log(generatedToken);
 
-    return this.mailerSer.sendMail({
-      to: login,
+    return await this.mailerSer.sendMail({
+      to: 'jelassi.nidhal@gmail.com',
       subject: 'Reinitialisation de mot de passe',
       //html: '<h2>Bonjour </h2>',
       template: './forgot-pwd.hbs',
-      context: { token: generatedToken },
+      //context: { token: generatedToken },
     });
   }
 

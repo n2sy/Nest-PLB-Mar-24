@@ -28,10 +28,10 @@ dotenv.config();
     }),
     MailerModule.forRoot({
       transport: {
-        host: process.env.HOST_MAIL,
+        host: 'live.smtp.mailtrap.io',
         auth: {
-          user: process.env.USER_MAIL,
-          pass: process.env.USER_PWD,
+          user: 'api',
+          pass: '8a4662261f63eeddad869db4eb56153e',
         },
       },
       defaults: {
